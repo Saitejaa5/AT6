@@ -4,23 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Segmentation</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>Customer Segmentation</h1>
-        <form id="predict-form">
-            <label for="features">Enter Features (comma-separated):</label>
-            <input type="text" id="features" required>
-            <button type="submit">Predict Cluster</button>
-        </form>
-        <div id="result"></div>
-    </div>
-
     <script>
-        document.getElementById("predict-form").addEventListener("submit", function(event) {
-            event.preventDefault();
-            let features = document.getElementById("features").value.split(",").map(Number);
+        function predictCluster() {
+            let inputString = document.getElementById("features").value;
+            let features = inputString.split(",").map(item => Number(item.trim()));
 
             fetch("/predict", {
                 method: "POST",
@@ -29,10 +16,22 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById("result").innerHTML = "Predicted Cluster: " + data.cluster;
+                document.getElementById("result").innerHTML = data.cluster !== undefined 
+                    ? "Predicted Cluster: " + data.cluster 
+                    : "Error: " + data.error;
             })
-            .catch(error => console.error("Error:", error));
-        });
+            .catch(error => {
+                console.error("Error:", error);
+                document.getElementById("result").innerHTML = "Server error.";
+            });
+        }
     </script>
+</head>
+<body>
+    <h2>Customer Segmentation</h2>
+    <label>Enter Features (comma-separated):</label>
+    <input type="text" id="features">
+    <button onclick="predictCluster()">Predict</button>
+    <p id="result"></p>
 </body>
 </html>
