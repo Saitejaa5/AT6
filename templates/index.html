@@ -1,36 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Segmentation</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Customer Segmentation</h1>
-        <form action="/predict" method="post">
-            <label for="age">Age:</label>
-            <input type="number" name="age" required>
-            
-            <label for="children">Number of Children:</label>
-            <input type="number" name="children" required>
-            
-            <label for="education_level">Education Level (Encoded):</label>
-            <input type="number" name="education_level" required>
-            
-            <label for="status">Marital Status (Encoded):</label>
-            <input type="number" name="status" required>
-            
-            <button type="submit">Predict</button>
-        </form>
+    <h1>Customer Segmentation</h1>
+    
+    <h2>Cluster Visualization</h2>
+    <img src="data:image/png;base64,{{ plot_url }}" alt="Cluster Visualization">
 
-        {% if prediction %}
-            <p class="result">{{ prediction }}</p>
-        {% endif %}
-        {% if error %}
-            <p class="error">{{ error }}</p>
-        {% endif %}
-    </div>
+    <h2>Predict Customer Segment</h2>
+    <form method="post">
+        <label>Feature 1: <input type="text" name="feature1" required></label><br>
+        <label>Feature 2: <input type="text" name="feature2" required></label><br>
+        <label>Feature 3: <input type="text" name="feature3" required></label><br>
+        <label>Feature 4: <input type="text" name="feature4" required></label><br>
+        <label>Feature 5: <input type="text" name="feature5" required></label><br>
+        <input type="submit" value="Predict">
+    </form>
+
+    {% if segment is not none %}
+        <h3>Predicted Segment: {{ segment }}</h3>
+    {% endif %}
 </body>
 </html>
